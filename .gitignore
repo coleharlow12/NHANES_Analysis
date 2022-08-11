@@ -10,10 +10,10 @@ __pycache__/
 *$py.class
 
 # Pal file storage
-.pkl
+*.pkl
 
 #Weights storage
-.tar
+*.tar
 
 # Prevents NHANES data being uploaded
-.txt
+*.txt
