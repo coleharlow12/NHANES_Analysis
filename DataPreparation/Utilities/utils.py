@@ -24,7 +24,7 @@ def SplitIntoCategorys(df,split):
 	df["Category"] = " "
 	for i, val in enumerate(split):
 		print(val)
-		isTrue = df.index[df["BMPHT"]>=val].to_list()
+		isTrue = df.index[df["Height"]>=val].to_list()
 		print(type(isTrue))
 		df.loc[isTrue,"Category"] = i
 

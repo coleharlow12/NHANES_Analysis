@@ -23,10 +23,9 @@ for il,line in enumerate(lines):
 		print("LABEL FOUND")
 		iLab = il
 
-
-labels = []
-startI = []
-endI = []
+labels = []	#Stores all the different labels found in the sas file
+startI = []	#Stores the start index of the data corresponding to the label i in the .txt data file
+endI = []	#Stores the end index of the data corresponding to the label in in the .txt data file
 # Gets the indices and labels of all the data
 for i0, iI in enumerate(np.arange(iInp+1,iLab-2)):
 	rem = lines[iI].split()			#Gets the line and splits at whitespace
@@ -38,7 +37,9 @@ for i0, iI in enumerate(np.arange(iInp+1,iLab-2)):
 
 #Specifies the labels I am interested in and finds their index
 keep = ['BMPWT','BMPHT','BMPSITHT','BMPLEG','BMPARML','BMPBIAC','BMPBIIL']
-keepInd = []
+newName = ['Weight','Height','SitHeight','UpperLegLength','UpperArmLength','ShoulderBladeWidth','HipWidth']
+keepInd = [] #Stores the indices of just the category's we want to keep
+
 for item in keep:
 	if item in labels:
 		keepInd.append(labels.index(item))
@@ -46,34 +47,37 @@ for item in keep:
 		print("Item not found in list")
 
 #Creates a empty pandas dataframe to load the data into
-data = pd.DataFrame(columns=keep)
+data = pd.DataFrame(columns=newName)
 
+# Reads the data from the .txt file
 with open(dataPath) as d:
 	lined = d.readlines()
 
 i=0
+#Loops through each line of the .txt file
 for line in lined:
-	addRow = {}
+	addRow = {}	#New row to add to the dataframe
 	for ind0,indK in enumerate(keepInd):
 		#print(keep[ind0]) #DEBUG
 		if startI[indK] is not endI[indK]:
 			# Only appends data if it is all there
 			try:
-				addRow[keep[ind0]] = [float(line[(startI[indK]-1):(endI[indK])])]
+				addRow[newName[ind0]] = [float(line[(startI[indK]-1):(endI[indK])])]
 			except ValueError:
 				continue
 
 		else:
 			# Only appends data if it is all there
 			try:
-				addRow[keep[ind0]] = [float(line[startI[indK]])]
+				addRow[newName[ind0]] = [float(line[startI[indK]])]
 			except ValueError:
 				continue
 
-	addRow = pd.DataFrame(addRow,columns=keep)
+	addRow = pd.DataFrame(addRow,columns=newName)
 	data = pd.concat([data,addRow],axis=0,ignore_index=True)
 	print(i)
 	i+=1
 
+#Saves data as a pickle file
 data.to_pickle(savePath)
 

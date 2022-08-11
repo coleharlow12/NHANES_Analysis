@@ -27,7 +27,7 @@ xTrn,xTst,yTrn,yTst = train_test_split(data.iloc[:,data.columns != "Category"],y
 #pdb.set_trace()
 
 ##___________________________________CLASSIFICATION USING SINGLE VARIABLE________________________________
-testVars = ['BMPSITHT','BMPLEG','BMPARML','BMPBIAC','BMPBIIL']
+testVars = ['SitHeight','UpperLegLength','UpperArmLength','ShoulderBladeWidth']
 cols = ['red','green','blue','gray','orange']
 # Number of classes in the data
 numClass = np.size(np.unique(y))
@@ -54,14 +54,16 @@ for ic,cat in enumerate(testVars):
 	print(cat,"Testing accuracy is: ",tstAcc)
 
 	#Confusion Matrix
+	plt.rcParams.update({'font.size':16})
 	#c_mat = metrics.confusion_matrix(yTst,yTstPred,normalize='true') #Create confusion matrix
 	#cm_disp = metrics.ConfusionMatrixDisplay(confusion_matrix=c_mat, display_labels = ['0','1','2'])
-	#cm_disp.plot()
+	#cm_disp.plot(cmap='cool')
 	#cm_disp.ax_.set_title(cat) #Adds title
 
 	#Calculates the probability of an object being in a given class
 	probTst = logreg.predict_proba(xTstNP)
 	CreateROC(probTst,cols[ic],cat,ax_array,yTst)
+plt.subplots_adjust(hspace=0.35)
 plt.show()
 
 ##___________________________________CLASSIFICATION USING DOUBLE VARIABLE________________________________
@@ -70,7 +72,7 @@ nrow = np.ceil(np.power(numClass,1/2)).astype(int)
 ncol = np.ceil(numClass/nrow).astype(int)
 fig, ax_array1 = plt.subplots(nrows=nrow,ncols=ncol)
 ax_array1 = ax_array1.flatten() #Flattened to make iterating easier
-testVars = ['BMPSITHT','BMPLEG','BMPARML','BMPBIAC']
+testVars = ['SitHeight','UpperLegLength','UpperArmLength','ShoulderBladeWidth']
 cols = ['red','green','blue','gray','orange','brown']
 
 for iC,comb in enumerate(combinations(testVars,2)):
@@ -91,13 +93,14 @@ for iC,comb in enumerate(combinations(testVars,2)):
 	#Confusion Matrix
 	#c_mat = metrics.confusion_matrix(yTst,yTstPred,normalize='true') #Create confusion matrix
 	#cm_disp = metrics.ConfusionMatrixDisplay(confusion_matrix=c_mat, display_labels = ['0','1','2'])
-	#cm_disp.plot()
+	#cm_disp.plot(cmap='cool')
 	#cm_disp.ax_.set_title(comb) #Adds title
 
 	#Calculates the probability of an object being in a given class
 	probTst = logreg.predict_proba(xTstNP)
 	CreateROC(probTst,cols[iC],comb,ax_array1,yTst)
 
+plt.subplots_adjust(hspace=0.35)
 plt.show()
 
 ##___________________________________CLASSIFICATION USING TRIPLE VARIABLE________________________________
@@ -106,7 +109,7 @@ nrow = np.ceil(np.power(numClass,1/2)).astype(int)
 ncol = np.ceil(numClass/nrow).astype(int)
 fig, ax_array1 = plt.subplots(nrows=nrow,ncols=ncol)
 ax_array1 = ax_array1.flatten() #Flattened to make iterating easier
-testVars = ['BMPSITHT','BMPLEG','BMPARML','BMPBIAC']
+testVars = ['SitHeight','UpperLegLength','UpperArmLength','ShoulderBladeWidth']
 
 for iC,comb in enumerate(combinations(testVars,3)):
 	xTrnNP = np.array(xTrn.loc[:,comb])
@@ -126,13 +129,11 @@ for iC,comb in enumerate(combinations(testVars,3)):
 	#Confusion Matrix
 	c_mat = metrics.confusion_matrix(yTst,yTstPred,normalize='true') #Create confusion matrix
 	cm_disp = metrics.ConfusionMatrixDisplay(confusion_matrix=c_mat, display_labels = ['0','1','2'])
-	cm_disp.plot()
+	cm_disp.plot(cmap='cool')
 	cm_disp.ax_.set_title(comb) #Adds title
 
 	#Calculates the probability of an object being in a given class
 	probTst = logreg.predict_proba(xTstNP)
 	CreateROC(probTst,cols[iC],comb,ax_array1,yTst)
+plt.subplots_adjust(hspace=0.35)
 plt.show()
-
-
-

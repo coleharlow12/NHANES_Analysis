@@ -24,7 +24,7 @@ def SplitIntoCategorys(df,split):
 	df["Category"] = " "
 	for i, val in enumerate(split):
 		print(val)
-		isTrue = df.index[df["BMPHT"]>=val].to_list()
+		isTrue = df.index[df["Height"]>=val].to_list()
 		print(type(isTrue))
 		df.loc[isTrue,"Category"] = i
 
@@ -110,7 +110,10 @@ def CreateROC(probs,col,lab,ax_array,yTrue):
 		ax_array[iC].set_title("Class"+str(iC))
 		ax_array[iC].set_xlabel("FPR")
 		ax_array[iC].set_ylabel("TPR")
-		ax_array[iC].legend(loc=4,prop={'size':12},markerscale=3)
+		ax_array[iC].legend(loc=4,prop={'size':10},markerscale=3)
+		ax_array[iC].set_xticks(np.arange(0,1,0.05),minor=True)
+		ax_array[iC].set_yticks(np.arange(0,1,0.05),minor=True)
+		ax_array[iC].grid(visible=True,which='both',axis='both')
 			
 
 
